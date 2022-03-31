@@ -15,6 +15,7 @@ const diagStyles = `
     }
     .dg-content-pane {
         background-color: lightgrey;
+        position: relative;
     }
 `;
 
