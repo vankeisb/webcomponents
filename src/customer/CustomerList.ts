@@ -1,5 +1,5 @@
 import { div, empty, slot, text, p, style } from "../builder/HtmlBuilder";
-import { Customer } from "../Customer";
+import { Customer } from "./Customer";
 import { CustomerRow } from "./CustomerRow";
 
 export class CustomerList extends HTMLElement {

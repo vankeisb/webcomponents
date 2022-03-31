@@ -1,13 +1,10 @@
-import { App } from "./App";
-import { CustomerEditor } from "./widgets/CustomerEditor";
-import { CustomerList } from "./widgets/CustomerList";
-import { CustomerRow } from "./widgets/CustomerRow";
+import { CustomerApp } from "./customer/CustomerApp";
 
 // just for imports !
-console.log('yalla', App.TAG_NAME);
+console.log('yalla', CustomerApp.TAG_NAME);
 
 window.addEventListener('load', e => {
-    const app: App = document.getElementById('app') as App;
+    const app: CustomerApp = document.getElementById('app') as CustomerApp;
     console.log("app loaded", app);
     app.init([
         { firstName: 'Toto', lastName: 'Biloute' },

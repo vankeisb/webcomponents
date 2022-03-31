@@ -1,10 +1,10 @@
-import { div, h1, text } from "./builder/HtmlBuilder";
+import { div, h1, text } from "../builder/HtmlBuilder";
 import { Customer } from "./Customer";
-import { CustomerEditor } from "./widgets/CustomerEditor";
-import { CustomerList } from "./widgets/CustomerList";
-import { CustomerRow } from "./widgets/CustomerRow";
+import { CustomerEditor } from "./CustomerEditor";
+import { CustomerList } from "./CustomerList";
+import { CustomerRow } from "./CustomerRow";
 
-export class App extends HTMLElement {
+export class CustomerApp extends HTMLElement {
 
     static TAG_NAME = "customers-app";
 
@@ -53,4 +53,4 @@ export class App extends HTMLElement {
 
 }
 
-customElements.define(App.TAG_NAME, App);
+customElements.define(CustomerApp.TAG_NAME, CustomerApp);
