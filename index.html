@@ -5,9 +5,52 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Web Components</title>
-  <script defer src="./dist/bundle.js"></script>
+  <script src="./dist/bundle.js"></script>
+  <style>
+    .v-scroller-container {
+      height: 400px;
+      width: 600px;
+      position: relative;
+    }
+
+    virtual-scroller {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;      
+      background-color: lightgray;
+      overflow: auto;
+    }
+
+    scroll-item { 
+      position: absolute;
+    }
+
+  </style>
 </head>
 <body>
+
   <customers-app id="app"></customers-app>
+
+
+  
+  <hr/>
+  <!-- <div class="v-scroller-container">
+    <virtual-scroller 
+      id="v-scroller"
+      content-height="1000"
+      content-width="1000"
+    > 
+      <scroll-item top="10" left="123">
+        Yalla
+      </scroll-item>
+       <scroll-item>
+        <div class="my-thing">
+          Thing
+        </div>
+      </scroll-item> 
+    </virtual-scroller>
+  </div> -->
 </body>
 </html>
