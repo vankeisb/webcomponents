@@ -46,8 +46,6 @@ export class DgNode extends HTMLElement {
         return safeParseInt(this.getAttribute('w'));
     }
 
-
-
    
 
 }
