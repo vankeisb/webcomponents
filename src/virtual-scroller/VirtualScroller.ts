@@ -1,5 +1,5 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
-import { safeParseInt } from "./SafeParseInt";
+import { safeParseInt } from "../SafeParseInt";
 import { ScrollItem } from "./ScrollItem";
 
 export class VirtualScroller extends HTMLElement {
@@ -45,7 +45,6 @@ export class VirtualScroller extends HTMLElement {
     }
 
     connectedCallback() {
-        debugger;
         this.setScrollPaneDimensions();
     }
 
@@ -94,7 +93,7 @@ export class VirtualScroller extends HTMLElement {
     }
 
     getScrollItems(): ReadonlyArray<ScrollItem> {
-        const items: NodeListOf<ScrollItem> = this.shadowRoot.querySelectorAll(ScrollItem.TAG_NAME);
+        const items: NodeListOf<ScrollItem> = this.querySelectorAll(ScrollItem.TAG_NAME);
         debugger;
         return Array.from(items);
     }

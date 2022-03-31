@@ -7,50 +7,22 @@
   <title>Web Components</title>
   <script src="./dist/bundle.js"></script>
   <style>
-    .v-scroller-container {
+    dg-diagram {
       height: 400px;
-      width: 600px;
+      width: 800px;
+      display: flex;
       position: relative;
-    }
-
-    virtual-scroller {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;      
       background-color: lightgray;
-      overflow: auto;
     }
-
-    scroll-item { 
-      position: absolute;
-    }
-
   </style>
 </head>
 <body>
-
-  <customers-app id="app"></customers-app>
-
-
-  
-  <hr/>
-  <!-- <div class="v-scroller-container">
-    <virtual-scroller 
-      id="v-scroller"
-      content-height="1000"
-      content-width="1000"
-    > 
-      <scroll-item top="10" left="123">
-        Yalla
-      </scroll-item>
-       <scroll-item>
-        <div class="my-thing">
-          Thing
-        </div>
-      </scroll-item> 
-    </virtual-scroller>
-  </div> -->
+  <dg-diagram>
+    <dg-node x="100" y="200" h="30" w="100">
+      <div class="my-node">
+        Hello node
+      </div>
+    </dg-node>
+  </dg-diagram>
 </body>
 </html>

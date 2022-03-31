@@ -1,5 +1,6 @@
 import { div, slot } from "../builder/HtmlBuilder";
-import { safeParseInt } from "./SafeParseInt";
+import { safeParseInt } from "../SafeParseInt";
+import { VirtualScroller } from "./VirtualScroller";
 
 export class ScrollItem extends HTMLElement {
 
@@ -18,17 +19,20 @@ export class ScrollItem extends HTMLElement {
     }
 
     connectedCallback() {
-        debugger;
         this.wrapper.style.position = "absolute";
         this.wrapper.style.top = this.top + 'px';
         this.wrapper.style.left = this.left + 'px';
+        // ugly ! need a timeout here to let browser render otherwise the element isn't yet sized
+        // TODO find way to get called when the component has been rendered
+        setTimeout(() => {
+            this.computeDimensions();
+        }, 0);
     }
 
     computeDimensions() {
-        debugger;
         const box = this.wrapper.getBoundingClientRect();
         this.height = box.height;
-        this.width = box.width;
+        this.width = box.width;    
     }
 
     get top(): number {
