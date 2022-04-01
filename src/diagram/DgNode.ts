@@ -31,6 +31,9 @@ export class DgNode extends HTMLElement {
         s.top = this.y + "px";
         s.width = this.w + "px";
         s.height = this.h + "px";
+        this.addEventListener('click', () => {
+            this.selected = !this.selected;
+        });
     }
 
     static get observedAttributes() {
@@ -86,6 +89,19 @@ export class DgNode extends HTMLElement {
     get w(): number {
         return safeParseInt(this.getAttribute('w'));
     }
+
+    get selected() {
+        return this.hasAttribute('selected');
+    }
+
+    set selected(s: boolean) {
+        if (s) {
+            this.setAttribute('selected', '');            
+        } else {
+            this.removeAttribute('selected');
+        }
+    }
+
 
 }
 

@@ -34,7 +34,12 @@
     /* dg-node[selected] .my-node {
       background-color: lightgreen;
     } */
-    dg-selectable[selected] .my-node {
+
+    dg-node {
+      cursor: pointer;
+    }
+
+    dg-node[selected] .my-node {
       background-color: lightgreen;
     }
   </style>
@@ -43,22 +48,13 @@
   <dg-diagram>
     <dg-node x="100" y="20" h="30" w="120">
       <div class="my-node">
-        No options
+        Yalla jkkj lksjlk sjk
       </div>  
     </dg-node>
-    <dg-node x="250" y="20" h="30" w="120">
-      <dg-selectable>
-        <div class="my-node">
-          Selectable
-        </div>    
-      </dg-selectable>
-    </dg-node>
-    <dg-node x="400" y="20" h="30" w="120">
-      <dg-selectable selected>
-        <div class="my-node">
-          Selectable selected
-        </div>    
-      </dg-selectable>
+    <dg-node x="250" y="20" h="30" w="120" selected>
+      <div class="my-node">
+        Selected by default
+      </div>    
     </dg-node>
 <!-- 
     <dg-node x="100" y="70" h="30" w="120">
