@@ -1,5 +1,5 @@
 import { empty, node } from "../builder/HtmlBuilder";
-import { boxCenter } from "./Box";
+import { boxCenter } from "./geometry/Box";
 import { DgDiagram } from "./DgDiagram";
 import { DgNode } from "./DgNode";
 

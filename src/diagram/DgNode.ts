@@ -1,6 +1,6 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
 import { safeParseInt } from "../SafeParseInt";
-import { Box, boxEquals } from "./Box";
+import { Box, boxEquals } from "./geometry/Box";
 import { DgDiagram } from "./DgDiagram";
 
 const css = `
