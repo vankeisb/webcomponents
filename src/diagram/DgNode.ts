@@ -1,5 +1,6 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
 import { safeParseInt } from "../SafeParseInt";
+import { Box, boxEquals } from "./Box";
 
 const css = `
     .dg-node {
@@ -15,6 +16,7 @@ export class DgNode extends HTMLElement {
 
     private readonly dgNode: HTMLDivElement;
     private readonly dgSlot: HTMLSlotElement;
+    private mouseDownBox: Box | undefined;
 
     constructor() {
         super();
@@ -31,9 +33,28 @@ export class DgNode extends HTMLElement {
         s.top = this.y + "px";
         s.width = this.w + "px";
         s.height = this.h + "px";
-        this.addEventListener('click', () => {
-            this.selected = !this.selected;
+        this.addEventListener('mousedown', () => {
+            console.log("mousedown", this);
+            this.mouseDownBox = this.getBox();
         });
+        this.addEventListener('mouseup', () => {
+            console.log("mouseup", this);
+            if (this.mouseDownBox) {
+                if (boxEquals(this.getBox(), this.mouseDownBox)) {
+                    this.selected = !this.selected;
+                }
+            }
+            this.mouseDownBox = undefined;
+        });
+    }
+
+    private getBox(): Box {
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+        }
     }
 
     static get observedAttributes() {

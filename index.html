@@ -15,18 +15,18 @@
       background-color: #EEEEEE;
     }
 
-    .my-node {
+    .my-node, .my-wrapping-node {
       background-color: #BBBBBB;
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      /* flex-grow: 1;
-      justify-content: center;
-      align-items: center; */
-      border-radius: 2px;
       overflow: hidden;
+    }
+
+    .my-node {
+      border-radius: 4px;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
@@ -40,6 +40,9 @@
     }
 
     dg-node[selected] .my-node {
+      background-color: lightgreen;
+    }
+    dg-node[selected] .my-wrapping-node {
       background-color: lightgreen;
     }
   </style>
@@ -56,18 +59,27 @@
         Selected by default
       </div>    
     </dg-node>
-<!-- 
-    <dg-node x="100" y="70" h="30" w="120">
-      <div class="my-node">
-        Draggable
-      </div>  
+    <dg-node x="400" y="20" h="30" w="120" selected>
+      <dg-draggable>
+        <div class="my-node">
+          Drag me
+        </div>    
+      </dg-draggable>
     </dg-node>
-    <dg-node x="250" y="70" h="30" w="120">
-      <div class="my-node">
-        Selectable
+    <dg-node x="10" y="80" h="100" w="50">
+      <dg-draggable>
+        <div class="my-wrapping-node">
+          Wrapping me is better... drag me !
+        </div>  
+      </dg-draggable>
+    </dg-node>
+    <dg-node x="250" y="70" h="100" w="100">
+      <div class="my-wrapping-node">
+        I am a (fixed) square
       </div>  
     </dg-node>
 
+<!-- 
     <dg-node x="10" y="120" h="50" w="120">
       <div class="my-node">
         Too long to fit bla bla bla

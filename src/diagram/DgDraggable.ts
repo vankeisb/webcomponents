@@ -26,19 +26,6 @@ export class DgDraggable extends HTMLElement {
     constructor() {
         super();
 
-        const shadow = this.attachShadow({ mode: 'open'});
-        const domNode = div({ className: 'dg-draggable'}, slot({}));
-        shadow.appendChild(domNode);
-        shadow.appendChild(
-            style({}, text(`
-            .dg-draggable {
-                cursor: move;
-                display: flex;
-                height: 100%;
-            }
-            `))
-        );
-
         const mouseMove = (e: MouseEvent) => {
             if (this.dragState) {
                 const { clientX, clientY } = e;
@@ -60,7 +47,7 @@ export class DgDraggable extends HTMLElement {
             this.dragState = undefined;
         }
 
-        domNode.addEventListener('mousedown', e => {
+        this.addEventListener('mousedown', e => {
             const { clientX, clientY } = e;
             const dgNode = this.getDgNode();      
             if (dgNode) {
