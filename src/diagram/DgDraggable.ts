@@ -33,6 +33,8 @@ export class DgDraggable extends HTMLElement {
             style({}, text(`
             .dg-draggable {
                 cursor: move;
+                display: flex;
+                height: 100%;
             }
             `))
         );
