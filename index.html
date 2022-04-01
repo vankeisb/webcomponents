@@ -12,34 +12,69 @@
       width: 800px;
       display: flex;
       position: relative;
-      background-color: lightgray;
+      background-color: #EEEEEE;
     }
 
     .my-node {
-      background-color: grey;
-      border: 1px solid black;
-      flex-grow: 1;
+      background-color: #BBBBBB;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* flex-grow: 1;
       justify-content: center;
-      align-items: center;
+      align-items: center; */
       border-radius: 2px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+
+    /* dg-node[selected] .my-node {
+      background-color: lightgreen;
+    } */
+    dg-selectable[selected] .my-node {
+      background-color: lightgreen;
+    }
   </style>
 </head>
 <body>
   <dg-diagram>
-    <dg-node x="100" y="20" h="30" w="100">
-      <dg-draggable>
-        <div class="my-node">
-          Hello node
-        </div>  
-      </dg-draggable>
-    </dg-node>
-    <dg-node x="10" y="200" h="50" w="20">
+    <dg-node x="100" y="20" h="30" w="120">
       <div class="my-node">
-        Yooooooo
+        No options
+      </div>  
+    </dg-node>
+    <dg-node x="250" y="20" h="30" w="120">
+      <dg-selectable>
+        <div class="my-node">
+          Selectable
+        </div>    
+      </dg-selectable>
+    </dg-node>
+    <dg-node x="400" y="20" h="30" w="120">
+      <dg-selectable selected>
+        <div class="my-node">
+          Selectable selected
+        </div>    
+      </dg-selectable>
+    </dg-node>
+<!-- 
+    <dg-node x="100" y="70" h="30" w="120">
+      <div class="my-node">
+        Draggable
+      </div>  
+    </dg-node>
+    <dg-node x="250" y="70" h="30" w="120">
+      <div class="my-node">
+        Selectable
+      </div>  
+    </dg-node>
+
+    <dg-node x="10" y="120" h="50" w="120">
+      <div class="my-node">
+        Too long to fit bla bla bla
       </div>
     </dg-node>
     <dg-node x="130" y="600" h="50" w="50">
@@ -53,17 +88,16 @@
       </div>
     </dg-node>
     <dg-node x="200" y="200" h="100" w="100">
-      <dg-draggable>
-        <div class="my-node">
-          WOOOO HOOOO
-        </div>
-      </dg-draggable>
+      <div class="my-node">
+        WOOOO HOOOO
+      </div>
     </dg-node>
     <dg-node x="800" y="100" h="40" w="150">
       <div class="my-node">
         yop-aaaa
       </div>
     </dg-node>
+     -->
   </dg-diagram>
 </body>
 </html>
