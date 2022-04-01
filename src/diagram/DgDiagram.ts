@@ -83,7 +83,7 @@ export class DgDiagram extends HTMLElement {
             // add new
             this.getDgLinks()
                 .forEach(l => {
-                    const line = l.drawLink(this.getNodeById(l.from), this.getNodeById(l.to);
+                    const line = l.drawLink(this.getNodeById(l.from), this.getNodeById(l.to));
                     this.linksSvg.appendChild(line);
                 });
         });
