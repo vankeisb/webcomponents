@@ -23,6 +23,10 @@ export class DgNode extends HTMLElement {
     }
 
     connectedCallback() {
+        this.refreshPosAndSizeFromProps();
+    }
+
+    private refreshPosAndSizeFromProps() {
         const s = this.dgNode.style;
         s.left = this.x + "px";
         s.top = this.y + "px";
@@ -34,8 +38,18 @@ export class DgNode extends HTMLElement {
         return safeParseInt(this.getAttribute('x'));
     }
 
+    set x(x: number) {
+        this.setAttribute('x', x.toString());
+        this.refreshPosAndSizeFromProps();
+    }
+
     get y(): number {
         return safeParseInt(this.getAttribute('y'));
+    }
+
+    set y(y: number) {
+        this.setAttribute('y', y.toString());
+        this.refreshPosAndSizeFromProps();
     }
 
     get h(): number {
