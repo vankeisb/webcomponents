@@ -47,6 +47,7 @@ export class DgNode extends HTMLElement {
             }
             this.mouseDownBox = undefined;
         });
+        this.getDgDiagram().registerNode(this);
     }
 
     getBox(): Box {
@@ -62,23 +63,39 @@ export class DgNode extends HTMLElement {
         return ['x', 'y', 'h', 'w'];
     }
 
+    private fireMoved() {
+        this.dispatchEvent(
+            new CustomEvent(
+                'moved',
+                { detail: this }
+            )
+        )
+    }
+
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         const s = this.dgNode.style;
+        if (oldValue === newValue) {
+            return;
+        }
         switch (name) {
             case 'x': {
                 s.left = this.x + 'px';
+                this.fireMoved();
                 break;
             }
             case 'y': {
                 s.top = this.y + 'px';
+                this.fireMoved();
                 break;
             }
             case 'w': {
                 s.width = this.w + 'px';
+                this.fireMoved();
                 break;
             }
             case 'h': {
                 s.height = this.h + 'px';
+                this.fireMoved();
                 break;
             }
             default:
