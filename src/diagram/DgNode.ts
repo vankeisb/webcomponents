@@ -1,6 +1,7 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
 import { safeParseInt } from "../SafeParseInt";
 import { Box, boxEquals } from "./Box";
+import { DgDiagram } from "./DgDiagram";
 
 const css = `
     .dg-node {
@@ -48,7 +49,7 @@ export class DgNode extends HTMLElement {
         });
     }
 
-    private getBox(): Box {
+    getBox(): Box {
         return {
             x: this.x,
             y: this.y,
@@ -83,6 +84,10 @@ export class DgNode extends HTMLElement {
             default:
                 break;
         }
+    }
+
+    get id(): string {
+        return this.getAttribute('id');
     }
 
     get x(): number {
@@ -121,6 +126,16 @@ export class DgNode extends HTMLElement {
         } else {
             this.removeAttribute('selected');
         }
+    }
+
+    getDgDiagram(from: HTMLElement = this): DgDiagram | undefined {
+        if (from.parentElement instanceof DgDiagram) {
+            return from.parentElement;
+        }
+        if (from.parentElement) {
+            return this.getDgDiagram(from.parentElement);
+        }
+        return undefined;
     }
 
 

@@ -1,4 +1,5 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
+import { DgNode } from "./DgNode";
 
 const diagStyles = `
     .dg-diagram {
@@ -39,6 +40,15 @@ export class DgDiagram extends HTMLElement {
     }    
 
     connectedCallback() {
+    }
+
+    getDgNodes(): ReadonlyArray<DgNode> {
+        const q = this.querySelectorAll<DgNode>('dg-node');
+        return Array.from(q);
+    }
+
+    getNodeById(id: string): DgNode | undefined {
+        return this.getDgNodes().find(n => n.id === id);
     }
 
 }

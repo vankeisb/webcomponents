@@ -49,31 +49,32 @@
 </head>
 <body>
   <dg-diagram>
-    <dg-node x="100" y="20" h="30" w="120">
+    <dg-node id="n1" x="100" y="20" h="30" w="120">
       <div class="my-node">
         Yalla jkkj lksjlk sjk
       </div>  
     </dg-node>
-    <dg-node x="250" y="20" h="30" w="120" selected>
+    <dg-node id="n2" x="250" y="20" h="30" w="120" selected>
       <div class="my-node">
         Selected by default
       </div>    
     </dg-node>
-    <dg-node x="400" y="20" h="30" w="120" selected>
+    <dg-link from="n1" to="n2"></dg-link>
+    <dg-node id="n3" x="400" y="20" h="30" w="120" selected>
       <dg-draggable>
         <div class="my-node">
           Drag me
         </div>    
       </dg-draggable>
     </dg-node>
-    <dg-node x="10" y="80" h="100" w="50">
+    <dg-node id="n4" x="10" y="80" h="100" w="50">
       <dg-draggable>
         <div class="my-wrapping-node">
           Wrapping me is better... drag me !
         </div>  
       </dg-draggable>
     </dg-node>
-    <dg-node x="250" y="70" h="100" w="100">
+    <dg-node id="n5" x="250" y="70" h="100" w="100">
       <div class="my-wrapping-node">
         I am a (fixed) square
       </div>  
