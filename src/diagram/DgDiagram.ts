@@ -27,6 +27,13 @@ const diagStyles = `
     }
 `;
 
+const svgDefs = `
+<marker id="arrowhead" markerWidth="10" markerHeight="7" 
+refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" />
+</marker>
+`
+
 export class DgDiagram extends HTMLElement {
 
     static TAG = "dg-diagram"
@@ -38,13 +45,16 @@ export class DgDiagram extends HTMLElement {
         const shadow = this.attachShadow({mode: 'open'});
         
         this.linksSvg.classList.add('dg-links');
+        const defs: SVGDefsElement = document.createElementNS(SVG_NS, 'svg');
+        defs.innerHTML = svgDefs;
+        this.linksSvg.appendChild(defs);
         const linksSlot: HTMLSlotElement = slot({ name: "links"})
         this.linksSvg.appendChild(linksSlot);
 
         const scrollPane = div(
             { className: 'dg-scroll-pane' },
-            slot({}),
             this.linksSvg,
+            slot({}),
         );
 
         shadow.appendChild(scrollPane);

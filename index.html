@@ -8,7 +8,7 @@
   <script src="./dist/bundle.js"></script>
   <style>
     dg-diagram {
-      height: 300px;
+      height: 500px;
       width: 800px;
       display: flex;
       position: relative;
@@ -61,7 +61,6 @@
         Selected by default
       </div>    
     </dg-node>
-    <dg-link from="n1" to="n2"/>
     <dg-node id="n3" x="400" y="20" h="30" w="120" selected>
       <dg-draggable>
         <div class="my-node">
@@ -81,7 +80,10 @@
         I am a (fixed) square
       </div>  
     </dg-node>
+
+    <dg-link from="n1" to="n2"/>
     <dg-link from="n5" to="n1"/>
+    <dg-link from="n4" to="n1"/>
 
 
 <!-- 
