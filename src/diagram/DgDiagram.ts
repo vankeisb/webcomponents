@@ -43,7 +43,7 @@ export class DgDiagram extends HTMLElement {
     constructor() {
         super();
         const shadow = this.attachShadow({mode: 'open'});
-        
+
         this.linksSvg.classList.add('dg-links');
         const defs: SVGDefsElement = document.createElementNS(SVG_NS, 'svg');
         defs.innerHTML = svgDefs;
@@ -59,7 +59,7 @@ export class DgDiagram extends HTMLElement {
 
         shadow.appendChild(scrollPane);
         shadow.appendChild(style({}, text(diagStyles)));
-    }    
+    }
 
     connectedCallback() {
     }
@@ -97,6 +97,16 @@ export class DgDiagram extends HTMLElement {
                     this.linksSvg.appendChild(line);
                 });
         });
+    }
+
+    static getParentDgDiagram(from: HTMLElement): DgDiagram | undefined {
+        if (from.parentElement instanceof DgDiagram) {
+            return from.parentElement;
+        }
+        if (from.parentElement) {
+            return DgDiagram.getParentDgDiagram(from.parentElement);
+        }
+        return undefined;
     }
 
 }

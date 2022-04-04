@@ -42,3 +42,7 @@ export function empty(e: Node) {
     e.removeChild(e.firstChild);
   }
 }
+
+export function px(n: number): string {
+  return n + 'px';
+}

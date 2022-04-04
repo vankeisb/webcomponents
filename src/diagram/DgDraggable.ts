@@ -31,12 +31,11 @@ export class DgDraggable extends HTMLElement {
                 const { clientX, clientY } = e;
                 this.dragState.curX = clientX;
                 this.dragState.curY = clientY;
-                const { deltaX, deltaY } = deltas(this.dragState); 
-                console.log(deltaX, deltaY);
-                const dgNode = this.getDgNode();                  
+                const { deltaX, deltaY } = deltas(this.dragState);
+                const dgNode = DgNode.getParentDgNode(this);
                 if (dgNode) {
                     dgNode.x = this.dragState.refX + deltaX;
-                    dgNode.y = this.dragState.refY + deltaY;    
+                    dgNode.y = this.dragState.refY + deltaY;
                 }
             }
         }
@@ -49,7 +48,7 @@ export class DgDraggable extends HTMLElement {
 
         this.addEventListener('mousedown', e => {
             const { clientX, clientY } = e;
-            const dgNode = this.getDgNode();      
+            const dgNode = DgNode.getParentDgNode(this);
             if (dgNode) {
                 this.dragState = {
                     downX: clientX,
@@ -59,24 +58,11 @@ export class DgDraggable extends HTMLElement {
                     refX: dgNode.x,
                     refY: dgNode.y,
                 };
-                console.log("mousedown");
                 document.addEventListener('mousemove', mouseMove);
-                document.addEventListener('mouseup', mouseUp);    
+                document.addEventListener('mouseup', mouseUp);
             }
         });
     }
-
-    private getDgNode(from: HTMLElement = this): DgNode | undefined {
-        if (from.parentElement instanceof DgNode) {
-            return from.parentElement;
-        }
-        if (from.parentElement) {
-            return this.getDgNode(from.parentElement);
-        }
-        return undefined;
-    }
-
-
 }
 
 customElements.define(DgDraggable.TAG, DgDraggable);

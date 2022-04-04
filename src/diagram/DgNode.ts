@@ -28,7 +28,7 @@ export class DgNode extends HTMLElement {
         shadow.appendChild(style({}, text(css)));
     }
 
-    connectedCallback() {        
+    connectedCallback() {
         const s = this.dgNode.style;
         s.left = this.x + "px";
         s.top = this.y + "px";
@@ -139,21 +139,26 @@ export class DgNode extends HTMLElement {
 
     set selected(s: boolean) {
         if (s) {
-            this.setAttribute('selected', '');            
+            this.setAttribute('selected', '');
         } else {
             this.removeAttribute('selected');
         }
     }
 
-    getDgDiagram(from: HTMLElement = this): DgDiagram | undefined {
-        if (from.parentElement instanceof DgDiagram) {
+    getDgDiagram(): DgDiagram | undefined {
+        return DgDiagram.getParentDgDiagram(this);
+    }
+
+    static getParentDgNode(from: HTMLElement): DgNode | undefined {
+        if (from.parentElement instanceof DgNode) {
             return from.parentElement;
         }
         if (from.parentElement) {
-            return this.getDgDiagram(from.parentElement);
+            return DgNode.getParentDgNode(from.parentElement);
         }
         return undefined;
     }
+
 
 
 }

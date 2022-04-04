@@ -14,8 +14,8 @@ export class DgLink extends HTMLElement {
         super();
     }
 
-    connectedCallback() {        
-       this.getDgDiagram().registerLink(this);
+    connectedCallback() {
+       DgDiagram.getParentDgDiagram(this).registerLink(this);
     }
 
     drawLink(fromNode: DgNode, toNode: DgNode): SVGLineElement {
@@ -31,11 +31,14 @@ export class DgLink extends HTMLElement {
         const isect1 = boxIntersection(fromBox, line);
         const isect2 = boxIntersection(toBox, line);
 
-        const svgLine = document.createElementNS(SVG_NS, 'line'); 
-        svgLine.setAttribute('x1', isect1.x.toString());
-        svgLine.setAttribute('x2', isect2.x.toString());
-        svgLine.setAttribute('y1', isect1.y.toString());
-        svgLine.setAttribute('y2', isect2.y.toString());
+        const fromPoint = isect1 || center1;
+        const toPoint = isect2 || center2;
+
+        const svgLine = document.createElementNS(SVG_NS, 'line');
+        svgLine.setAttribute('x1', fromPoint.x.toString());
+        svgLine.setAttribute('x2', toPoint.x.toString());
+        svgLine.setAttribute('y1', fromPoint.y.toString());
+        svgLine.setAttribute('y2', toPoint.y.toString());
         svgLine.setAttribute('stroke', 'black');
         svgLine.setAttribute('stroke-width', '2');
         svgLine.setAttribute('marker-end', 'url(#arrowhead)');
@@ -50,17 +53,6 @@ export class DgLink extends HTMLElement {
     get to(): string {
         return this.getAttribute('to');
     }
-    
-    private getDgDiagram(from: HTMLElement = this): DgDiagram | undefined {
-        if (from.parentElement instanceof DgDiagram) {
-            return from.parentElement;
-        }
-        if (from.parentElement) {
-            return this.getDgDiagram(from.parentElement);
-        }
-        return undefined;
-    }
-
 }
 
 customElements.define(DgLink.TAG, DgLink)
