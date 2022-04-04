@@ -1,20 +1,12 @@
 import { div, slot, style, text } from "../builder/HtmlBuilder";
 import { DgNode } from "./DgNode";
+import {dragDeltas, dragUpdate, MouseDrag, newMouseDrag} from "./MouseDrag";
 
 interface DragState {
     readonly refX: number;
     readonly refY: number;
-    readonly downX: number;
-    readonly downY: number;
-    curX: number;
-    curY: number;
-}
+    mouseDrag: MouseDrag;
 
-function deltas(ds:DragState) {
-    return {
-        deltaX: ds.curX - ds.downX,
-        deltaY: ds.curY - ds.downY
-    }
 }
 
 export class DgDraggable extends HTMLElement {
@@ -28,14 +20,12 @@ export class DgDraggable extends HTMLElement {
 
         const mouseMove = (e: MouseEvent) => {
             if (this.dragState) {
-                const { clientX, clientY } = e;
-                this.dragState.curX = clientX;
-                this.dragState.curY = clientY;
-                const { deltaX, deltaY } = deltas(this.dragState);
+                dragUpdate(this.dragState.mouseDrag, e);
+                const { dx, dy } = dragDeltas(this.dragState.mouseDrag);
                 const dgNode = DgNode.getParentDgNode(this);
                 if (dgNode) {
-                    dgNode.x = this.dragState.refX + deltaX;
-                    dgNode.y = this.dragState.refY + deltaY;
+                    dgNode.x = this.dragState.refX + dx;
+                    dgNode.y = this.dragState.refY + dy;
                 }
             }
         }
@@ -51,10 +41,7 @@ export class DgDraggable extends HTMLElement {
             const dgNode = DgNode.getParentDgNode(this);
             if (dgNode) {
                 this.dragState = {
-                    downX: clientX,
-                    downY: clientY,
-                    curX: clientX,
-                    curY: clientY,
+                    mouseDrag: newMouseDrag(e),
                     refX: dgNode.x,
                     refY: dgNode.y,
                 };
