@@ -113,7 +113,7 @@ export class DgNode extends HTMLElement {
 
     set x(x: number) {
         this.setAttribute('x', x.toString());
-        this.dgNode.style.left = this.x + 'px';
+        this.dgNode.style.left = x + 'px';
     }
 
     get y(): number {
@@ -122,15 +122,25 @@ export class DgNode extends HTMLElement {
 
     set y(y: number) {
         this.setAttribute('y', y.toString());
-        this.dgNode.style.top = this.y + 'px';
+        this.dgNode.style.top = y + 'px';
     }
 
     get h(): number {
         return safeParseInt(this.getAttribute('h'));
     }
 
+    set h(h: number) {
+        this.setAttribute('h', h.toString());
+        this.dgNode.style.height = h + 'px';
+    }
+
     get w(): number {
         return safeParseInt(this.getAttribute('w'));
+    }
+
+    set w(w: number) {
+        this.setAttribute('w', w.toString());
+        this.dgNode.style.width = w + 'px';
     }
 
     get selected() {

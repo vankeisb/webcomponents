@@ -1,9 +1,7 @@
 import {safeParseInt} from "../SafeParseInt";
 import {DgNode} from "./DgNode";
 import {div, empty, px, slot, style, text} from "../builder/HtmlBuilder";
-
-const MIN_SIZE = 10;
-const BORDER_SIZE = 2;
+import {dragDeltas, dragUpdate, MouseDrag, newMouseDrag} from "./MouseDrag";
 
 type DragMode =
     | 'top'
@@ -16,21 +14,15 @@ type DragMode =
     | 'bottom-right'
 
 interface ResizeState {
+    readonly refX: number;
+    readonly refY: number;
     readonly refW: number;
     readonly refH: number;
-    readonly downX: number;
-    readonly downY: number;
-    curX: number;
-    curY: number;
     readonly mode: DragMode;
+    mouseDrag: MouseDrag;
 }
 
-function deltas(ds:ResizeState) {
-    return {
-        deltaX: ds.curX - ds.downX,
-        deltaY: ds.curY - ds.downY
-    }
-}
+const MIN_SIZE = 10;
 
 export class DgResizeable extends HTMLElement {
 
@@ -43,16 +35,82 @@ export class DgResizeable extends HTMLElement {
 
     private docMouseMove = (e: MouseEvent) => {
         if (this.dragState) {
-            const { clientX, clientY } = e;
-            this.dragState.curX = clientX;
-            this.dragState.curY = clientY;
-            const { deltaX, deltaY } = deltas(this.dragState);
-            console.log("moved", deltaX, deltaY);
-
+            console.log("move", this.dragState);
+            const dgNode = DgNode.getParentDgNode(this);
+            if (dgNode) {
+                dragUpdate(this.dragState.mouseDrag, e);
+                const { dx, dy } = dragDeltas(this.dragState.mouseDrag);
+                console.log("deltas", dx, dy, "mode", this.dragState.mode);
+                switch (this.dragState.mode) {
+                    case "top": {
+                        const { refY, refH } = this.dragState;
+                        const newY = refY + dy;
+                        const newH = refH - dy;
+                        if (newH < MIN_SIZE) {
+                            return;
+                        }
+                        dgNode.y = newY;
+                        dgNode.h = newH;
+                        break;
+                    }
+                    case "bottom": {
+                        const { refH } = this.dragState;
+                        const newH = refH + dy;
+                        if (newH < MIN_SIZE) {
+                            return;
+                        }
+                        dgNode.h = newH;
+                        break;
+                    }
+                    case "left": {
+                        const { refX, refW } = this.dragState;
+                        const newX = refX + dx;
+                        const newW = refW - dx;
+                        if (newW < MIN_SIZE) {
+                            return;
+                        }
+                        dgNode.x = newX;
+                        dgNode.w = newW;
+                        break;
+                    }
+                    case "right": {
+                        const { refW } = this.dragState;
+                        const newW = refW + dx;
+                        if (newW < MIN_SIZE) {
+                            return;
+                        }
+                        dgNode.w = newW;
+                        break;
+                    }
+                    case "top-left": {
+                        const { refX, refW, refY, refH } = this.dragState;
+                        let newY = refY + dy;
+                        let newH = refH - dy;
+                        if (newH < MIN_SIZE) {
+                            newH = MIN_SIZE;
+                            const deltaH = newH - refH;
+                            newY = refY - deltaH;
+                        }
+                        let newX = refX + dx;
+                        let newW = refW - dx;
+                        if (newW < MIN_SIZE) {
+                            newW = MIN_SIZE;
+                            const deltaW = newW - refW;
+                            newX = refX - deltaW;
+                        }
+                        dgNode.y = newY;
+                        dgNode.h = newH;
+                        dgNode.x = newX;
+                        dgNode.w = newW;
+                        break;
+                    }
+                    // TODO other resize modes...
+                }
+            }
         }
     }
 
-    private docMouseUp = (e: MouseEvent) => {
+    private docMouseUp = () => {
         console.log("up !");
         document.removeEventListener('mousemove', this.docMouseMove);
         document.removeEventListener('mouseup', this.docMouseUp);
@@ -77,6 +135,7 @@ export class DgResizeable extends HTMLElement {
         reBottom.style.right = "2px";
         reBottom.style.height = "2px";
         reBottom.style.cursor = "ns-resize";
+        reBottom.addEventListener('mousedown', this.onReMouseDown('bottom'));
 
         const reLeft = div({ className: 'dg-resize-elem '});
         reLeft.style.top = "2px";
@@ -84,6 +143,7 @@ export class DgResizeable extends HTMLElement {
         reLeft.style.left = "0";
         reLeft.style.width = "2px";
         reLeft.style.cursor = "ew-resize";
+        reLeft.addEventListener('mousedown', this.onReMouseDown('left'));
 
         const reRight = div({ className: 'dg-resize-elem '});
         reRight.style.top = "2px";
@@ -91,6 +151,7 @@ export class DgResizeable extends HTMLElement {
         reRight.style.right = "0";
         reRight.style.width = "2px";
         reRight.style.cursor = "ew-resize";
+        reRight.addEventListener('mousedown', this.onReMouseDown('right'));
 
         const reTopLeft = div({ className: 'dg-resize-elem '});
         reTopLeft.style.top = "0";
@@ -98,6 +159,7 @@ export class DgResizeable extends HTMLElement {
         reTopLeft.style.width = "2px";
         reTopLeft.style.height = "2px";
         reTopLeft.style.cursor = "nwse-resize";
+        reTopLeft.addEventListener('mousedown', this.onReMouseDown('top-left'));
 
         const reTopRight = div({ className: 'dg-resize-elem '});
         reTopRight.style.top = "0";
@@ -105,6 +167,7 @@ export class DgResizeable extends HTMLElement {
         reTopRight.style.width = "2px";
         reTopRight.style.height = "2px";
         reTopRight.style.cursor = "nesw-resize";
+        reTopRight.addEventListener('mousedown', this.onReMouseDown('top-right'));
 
         const reBottomLeft = div({ className: 'dg-resize-elem '});
         reBottomLeft.style.bottom = "0";
@@ -112,6 +175,7 @@ export class DgResizeable extends HTMLElement {
         reBottomLeft.style.width = "2px";
         reBottomLeft.style.height = "2px";
         reBottomLeft.style.cursor = "nesw-resize";
+        reBottomLeft.addEventListener('mousedown', this.onReMouseDown('bottom-left'));
 
         const reBottomRight = div({ className: 'dg-resize-elem '});
         reBottomRight.style.bottom = "0";
@@ -119,6 +183,7 @@ export class DgResizeable extends HTMLElement {
         reBottomRight.style.width = "2px";
         reBottomRight.style.height = "2px";
         reBottomRight.style.cursor = "nwse-resize";
+        reBottomRight.addEventListener('mousedown', this.onReMouseDown('bottom-right'));
 
         this.reElems = [
             reTopLeft,
@@ -152,17 +217,15 @@ export class DgResizeable extends HTMLElement {
 
     private onReMouseDown(mode: DragMode): (e:MouseEvent) => void {
         return e => {
-            const { clientX, clientY } = e;
             const dgNode = DgNode.getParentDgNode(this);
             if (dgNode) {
                 this.dragState = {
+                    mouseDrag: newMouseDrag(e),
                     mode,
-                    downX: clientX,
-                    downY: clientY,
-                    curX: clientX,
-                    curY: clientY,
                     refW: dgNode.w,
                     refH: dgNode.h,
+                    refX: dgNode.x,
+                    refY: dgNode.y,
                 };
                 document.addEventListener('mousemove', this.docMouseMove);
                 document.addEventListener('mouseup', this.docMouseUp);
@@ -177,29 +240,6 @@ export class DgResizeable extends HTMLElement {
     private removeResizeElems() {
         this.reElems.forEach(e => this.shadow.removeChild(e));
     }
-
-
-    // private addResizeElems() {
-    //     empty(this.shadow);
-    //     const dgNode = DgNode.getParentDgNode(this);
-    //     const { x, y, w, h } = dgNode;
-    //     if (w >= MIN_SIZE && h >= MIN_SIZE) {
-    //         const leftTopDiv = div({
-    //             className: 'dg-resizer-left-top',
-    //             style: {
-    //                 // backgroundColor: 'red',
-    //                 position: 'absolute',
-    //                 left: px(x),
-    //                 top: px(y),
-    //                 height: px(2),
-    //                 width: px(2)
-    //             }
-    //         });
-    //         // this.shadow.appendChild(leftTopDiv);
-    //         // const leftDiv = div({ className: 'dg-resizer-left'});
-    //     }
-    //
-    // }
 
     get height(): number {
         return safeParseInt(this.getAttribute('height'));
