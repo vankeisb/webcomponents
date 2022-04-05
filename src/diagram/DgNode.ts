@@ -35,11 +35,9 @@ export class DgNode extends HTMLElement {
         s.width = this.w + "px";
         s.height = this.h + "px";
         this.addEventListener('mousedown', () => {
-            console.log("mousedown", this);
             this.mouseDownBox = this.getBox();
         });
         this.addEventListener('mouseup', () => {
-            console.log("mouseup", this);
             if (this.mouseDownBox) {
                 if (boxEquals(this.getBox(), this.mouseDownBox)) {
                     this.selected = !this.selected;

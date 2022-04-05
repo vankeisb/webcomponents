@@ -35,12 +35,10 @@ export class DgResizeable extends HTMLElement {
 
     private docMouseMove = (e: MouseEvent) => {
         if (this.dragState) {
-            console.log("move", this.dragState);
             const dgNode = DgNode.getParentDgNode(this);
             if (dgNode) {
                 dragUpdate(this.dragState.mouseDrag, e);
                 const { dx, dy } = dragDeltas(this.dragState.mouseDrag);
-                console.log("deltas", dx, dy, "mode", this.dragState.mode);
                 switch (this.dragState.mode) {
                     case "top": {
                         const { refY, refH } = this.dragState;
@@ -111,7 +109,6 @@ export class DgResizeable extends HTMLElement {
     }
 
     private docMouseUp = () => {
-        console.log("up !");
         document.removeEventListener('mousemove', this.docMouseMove);
         document.removeEventListener('mouseup', this.docMouseUp);
     }
