@@ -1,8 +1,7 @@
-import { empty, node } from "../builder/HtmlBuilder";
-import { boxCenter, boxIntersection } from "./geometry/Box";
-import { DgDiagram } from "./DgDiagram";
-import { DgNode } from "./DgNode";
-import { Line, lineIntersection } from "./geometry/Line";
+import {boxCenter, boxIntersection} from "./geometry/Box";
+import {DgDiagram} from "./DgDiagram";
+import {DgNode} from "./DgNode";
+import {Line} from "./geometry/Line";
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -10,15 +9,45 @@ export class DgLink extends HTMLElement {
 
     static TAG = 'dg-link';
 
+    private linksSvg: SVGElement | undefined;
+    private lineSvg: SVGLineElement | undefined;
+    private diagram: DgDiagram | undefined;
+
     constructor() {
         super();
     }
 
     connectedCallback() {
-       DgDiagram.getParentDgDiagram(this).registerLink(this);
+        this.diagram = DgDiagram.getParentDgDiagram(this);
+        this.linksSvg = this.diagram.linksSvg;
+        this.drawLink();
     }
 
-    drawLink(fromNode: DgNode, toNode: DgNode): SVGLineElement {
+    // static get observedAttributes() {
+    //     return ['selected'];
+    // }
+    //
+    // attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    //     if (oldValue !== null) {
+    //         if (name === 'selected') {
+    //
+    //         }
+    //     }
+    // }
+
+    clearLink() {
+        if (this.linksSvg && this.lineSvg) {
+            this.linksSvg.removeChild(this.lineSvg);
+            this.lineSvg = undefined;
+        }
+    }
+
+    drawLink(): void {
+        this.clearLink();
+
+        const fromNode: DgNode = this.diagram.getNodeById(this.from);
+        const toNode: DgNode = this.diagram.getNodeById(this.to);
+
         const fromBox = fromNode.getBox();
         const toBox = toNode.getBox();
         const center1 = boxCenter(fromBox);
@@ -43,7 +72,8 @@ export class DgLink extends HTMLElement {
         svgLine.setAttribute('stroke-width', '2');
         svgLine.setAttribute('marker-end', 'url(#arrowhead)');
 
-        return svgLine;
+        this.linksSvg.appendChild(svgLine);
+        this.lineSvg = svgLine;
     }
 
     get from(): string {
@@ -52,6 +82,18 @@ export class DgLink extends HTMLElement {
 
     get to(): string {
         return this.getAttribute('to');
+    }
+
+    get selected(): boolean {
+        return this.hasAttribute('selected');
+    }
+
+    set selected(selected: boolean) {
+        if (selected) {
+            this.setAttribute('selected', '');
+        } else {
+            this.removeAttribute('selected');
+        }
     }
 }
 

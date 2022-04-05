@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web Components</title>
+  <script src="./dist/bundle.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <dg-diagram>
+    <dg-node id="n1" x="10" y="10" h="30" w="50">
+      <dg-draggable>
+        <div class="my-node">
+          Node 1
+        </div>
+      </dg-draggable>
+    </dg-node>
+    <dg-node id="n2" x="200" y="10" h="30" w="50" selected>
+      <dg-draggable>
+        <div class="my-node">
+          Node 2
+        </div>
+      </dg-draggable>
+    </dg-node>
+    <dg-link from="n1" to="n2" selected></dg-link>
+  </dg-diagram>
+</body>
+</html>

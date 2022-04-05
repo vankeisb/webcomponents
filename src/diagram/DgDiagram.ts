@@ -38,7 +38,7 @@ export class DgDiagram extends HTMLElement {
 
     static TAG = "dg-diagram"
 
-    private linksSvg: SVGElement = document.createElementNS(SVG_NS, 'svg');
+    readonly linksSvg: SVGElement = document.createElementNS(SVG_NS, 'svg');
 
     constructor() {
         super();
@@ -78,24 +78,31 @@ export class DgDiagram extends HTMLElement {
         return Array.from(q);
     }
 
-    registerLink(link: DgLink) {
-        const line = link.drawLink(this.getNodeById(link.from), this.getNodeById(link.to));
-        line.setAttribute("from", link.from);
-        line.setAttribute("to", link.to);
-        this.linksSvg.appendChild(line);
-    }
+    // registerLink(link: DgLink) {
+    //     const line = link.drawLink(this.getNodeById(link.from), this.getNodeById(link.to));
+    //     line.setAttribute("from", link.from);
+    //     line.setAttribute("to", link.to);
+    //     this.linksSvg.appendChild(line);
+    // }
 
     registerNode(node: DgNode) {
         node.addEventListener('moved', () => {
             // update all links
-            this.linksSvg.querySelectorAll("line")
-                .forEach(line => line.remove());
-            // add new
             this.getDgLinks()
-                .forEach(l => {
-                    const line = l.drawLink(this.getNodeById(l.from), this.getNodeById(l.to));
-                    this.linksSvg.appendChild(line);
+                .forEach(dgLink => {
+                    if (dgLink.from === node.id || dgLink.to === node.id) {
+                        dgLink.drawLink();
+                    }
                 });
+            //
+            // this.linksSvg.querySelectorAll("line")
+            //     .forEach(line => line.remove());
+            // // add new
+            // this.getDgLinks()
+            //     .forEach(l => {
+            //         const line = l.drawLink(this.getNodeById(l.from), this.getNodeById(l.to));
+            //         this.linksSvg.appendChild(line);
+            //     });
         });
     }
 
