@@ -1,0 +1,38 @@
+dg-diagram {
+    height: 500px;
+    width: 800px;
+    display: flex;
+    position: relative;
+    background-color: #EEEEEE;
+}
+
+.my-node, .my-wrapping-node {
+    background-color: #BBBBBB;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.my-node {
+    border-radius: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* dg-node[selected] .my-node {
+  background-color: lightgreen;
+} */
+
+dg-node {
+    cursor: pointer;
+}
+
+dg-node[selected] .my-node {
+    background-color: lightgreen;
+}
+dg-node[selected] .my-wrapping-node {
+    background-color: lightgreen;
+}
