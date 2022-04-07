@@ -9,8 +9,15 @@ export class DgLink extends HTMLElement {
 
     static TAG = 'dg-link';
 
+    private linksSvg: SVGElement | undefined;
+    private line: SVGLineElement | undefined;
+
     constructor() {
         super();
+    }
+
+    setLinksSvg(linksSvg: SVGElement):void {
+        this.linksSvg = linksSvg;
     }
 
     connectedCallback() {
@@ -29,7 +36,13 @@ export class DgLink extends HTMLElement {
     //     }
     // }
 
-    draw(): SVGLineElement {
+    draw() {
+        if (!this.linksSvg) {
+            return;
+        }
+        if (this.line) {
+            this.line.remove();
+        }
         const diagram = DgDiagram.getParentDgDiagram(this);
         const fromNode: DgNode = diagram.getNodeById(this.from);
         const toNode: DgNode = diagram.getNodeById(this.to);
@@ -50,15 +63,21 @@ export class DgLink extends HTMLElement {
         const toPoint = isect2 || center2;
 
         const svgLine = document.createElementNS(SVG_NS, 'line');
+        svgLine.classList.add('dg-link-line');
         svgLine.setAttribute('x1', fromPoint.x.toString());
         svgLine.setAttribute('x2', toPoint.x.toString());
         svgLine.setAttribute('y1', fromPoint.y.toString());
         svgLine.setAttribute('y2', toPoint.y.toString());
-        svgLine.setAttribute('stroke', 'black');
+        // svgLine.setAttribute('stroke', 'black');
         svgLine.setAttribute('stroke-width', '2');
         svgLine.setAttribute('marker-end', 'url(#arrowhead)');
 
-        return svgLine;
+        svgLine.addEventListener('mousedown', () => {
+            debugger;
+        });
+
+        this.line = svgLine;
+        this.linksSvg.appendChild(svgLine);
     }
 
     get from(): string {

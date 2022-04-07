@@ -25,6 +25,14 @@ const diagStyles = `
         background-color: lightgrey;
         position: relative;
     }
+
+    .dg-link-line {
+        stroke: black;
+    }
+
+    .dg-link-line.dg-selected {
+        stroke: lightgreen;
+    }
 `;
 
 const svgDefs = `
@@ -45,11 +53,9 @@ export class DgDiagram extends HTMLElement {
         const shadow = this.attachShadow({mode: 'open'});
 
         this.linksSvg.classList.add('dg-links');
-        const defs: SVGDefsElement = document.createElementNS(SVG_NS, 'svg');
+        const defs: SVGDefsElement = document.createElementNS(SVG_NS, 'defs');
         defs.innerHTML = svgDefs;
         this.linksSvg.appendChild(defs);
-        const linksSlot: HTMLSlotElement = slot({ name: "links"})
-        this.linksSvg.appendChild(linksSlot);
 
         const scrollPane = div(
             { className: 'dg-scroll-pane' },
@@ -79,7 +85,8 @@ export class DgDiagram extends HTMLElement {
     }
 
     registerLink(link: DgLink) {
-        this.drawLink(link);
+        link.setLinksSvg(this.linksSvg);
+        link.draw();
     }
 
     private clearLink(link: DgLink) {
@@ -91,21 +98,13 @@ export class DgDiagram extends HTMLElement {
             .forEach(l => l.remove());
     }
 
-    private drawLink(link: DgLink): void {
-        this.clearLink(link);
-        const line = link.draw();
-        line.setAttribute('data-from', link.from);
-        line.setAttribute('data-to', link.to);
-        this.linksSvg.appendChild(line);
-    }
-
     registerNode(node: DgNode) {
         node.addEventListener('moved', () => {
             // update links connected to this node
             this.getDgLinks()
                 .forEach(dgLink => {
                     if (dgLink.from === node.id || dgLink.to === node.id) {
-                        this.drawLink(dgLink);
+                        dgLink.draw();
                     }
                 });
         });
