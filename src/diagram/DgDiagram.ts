@@ -38,7 +38,7 @@ export class DgDiagram extends HTMLElement {
 
     static TAG = "dg-diagram"
 
-    readonly linksSvg: SVGElement = document.createElementNS(SVG_NS, 'svg');
+    private readonly linksSvg: SVGElement = document.createElementNS(SVG_NS, 'svg');
 
     constructor() {
         super();
@@ -73,36 +73,41 @@ export class DgDiagram extends HTMLElement {
         return this.getDgNodes().find(n => n.id === id);
     }
 
-    getDgLinks(): ReadonlyArray<DgLink> {
+    private getDgLinks(): ReadonlyArray<DgLink> {
         const q = this.querySelectorAll<DgLink>(DgLink.TAG);
         return Array.from(q);
     }
 
-    // registerLink(link: DgLink) {
-    //     const line = link.drawLink(this.getNodeById(link.from), this.getNodeById(link.to));
-    //     line.setAttribute("from", link.from);
-    //     line.setAttribute("to", link.to);
-    //     this.linksSvg.appendChild(line);
-    // }
+    registerLink(link: DgLink) {
+        this.drawLink(link);
+    }
+
+    private clearLink(link: DgLink) {
+        Array.from(this.linksSvg.querySelectorAll("line"))
+            .filter(l => 
+                l.getAttribute('data-from') === link.from 
+                    && l.getAttribute('data-to') === link.to
+            )
+            .forEach(l => l.remove());
+    }
+
+    private drawLink(link: DgLink): void {
+        this.clearLink(link);
+        const line = link.draw();
+        line.setAttribute('data-from', link.from);
+        line.setAttribute('data-to', link.to);
+        this.linksSvg.appendChild(line);
+    }
 
     registerNode(node: DgNode) {
         node.addEventListener('moved', () => {
-            // update all links
+            // update links connected to this node
             this.getDgLinks()
                 .forEach(dgLink => {
                     if (dgLink.from === node.id || dgLink.to === node.id) {
-                        dgLink.drawLink();
+                        this.drawLink(dgLink);
                     }
                 });
-            //
-            // this.linksSvg.querySelectorAll("line")
-            //     .forEach(line => line.remove());
-            // // add new
-            // this.getDgLinks()
-            //     .forEach(l => {
-            //         const line = l.drawLink(this.getNodeById(l.from), this.getNodeById(l.to));
-            //         this.linksSvg.appendChild(line);
-            //     });
         });
     }
 

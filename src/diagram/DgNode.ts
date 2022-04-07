@@ -153,7 +153,7 @@ export class DgNode extends HTMLElement {
         }
     }
 
-    getDgDiagram(): DgDiagram | undefined {
+    private getDgDiagram(): DgDiagram | undefined {
         return DgDiagram.getParentDgDiagram(this);
     }
 

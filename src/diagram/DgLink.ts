@@ -9,18 +9,12 @@ export class DgLink extends HTMLElement {
 
     static TAG = 'dg-link';
 
-    private linksSvg: SVGElement | undefined;
-    private lineSvg: SVGLineElement | undefined;
-    private diagram: DgDiagram | undefined;
-
     constructor() {
         super();
     }
 
     connectedCallback() {
-        this.diagram = DgDiagram.getParentDgDiagram(this);
-        this.linksSvg = this.diagram.linksSvg;
-        this.drawLink();
+        DgDiagram.getParentDgDiagram(this).registerLink(this);
     }
 
     // static get observedAttributes() {
@@ -35,18 +29,10 @@ export class DgLink extends HTMLElement {
     //     }
     // }
 
-    clearLink() {
-        if (this.linksSvg && this.lineSvg) {
-            this.linksSvg.removeChild(this.lineSvg);
-            this.lineSvg = undefined;
-        }
-    }
-
-    drawLink(): void {
-        this.clearLink();
-
-        const fromNode: DgNode = this.diagram.getNodeById(this.from);
-        const toNode: DgNode = this.diagram.getNodeById(this.to);
+    draw(): SVGLineElement {
+        const diagram = DgDiagram.getParentDgDiagram(this);
+        const fromNode: DgNode = diagram.getNodeById(this.from);
+        const toNode: DgNode = diagram.getNodeById(this.to);
 
         const fromBox = fromNode.getBox();
         const toBox = toNode.getBox();
@@ -72,8 +58,7 @@ export class DgLink extends HTMLElement {
         svgLine.setAttribute('stroke-width', '2');
         svgLine.setAttribute('marker-end', 'url(#arrowhead)');
 
-        this.linksSvg.appendChild(svgLine);
-        this.lineSvg = svgLine;
+        return svgLine;
     }
 
     get from(): string {
