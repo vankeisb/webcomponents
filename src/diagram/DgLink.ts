@@ -63,21 +63,32 @@ export class DgLink extends HTMLElement {
         const toPoint = isect2 || center2;
 
         const svgLine = document.createElementNS(SVG_NS, 'line');
+        this.line = svgLine;
         svgLine.classList.add('dg-link-line');
+        this.setSelectedStyles();
         svgLine.setAttribute('x1', fromPoint.x.toString());
         svgLine.setAttribute('x2', toPoint.x.toString());
         svgLine.setAttribute('y1', fromPoint.y.toString());
         svgLine.setAttribute('y2', toPoint.y.toString());
-        // svgLine.setAttribute('stroke', 'black');
         svgLine.setAttribute('stroke-width', '2');
-        svgLine.setAttribute('marker-end', 'url(#arrowhead)');
 
         svgLine.addEventListener('mousedown', () => {
-            debugger;
+            this.selected = !this.selected;
         });
 
-        this.line = svgLine;
         this.linksSvg.appendChild(svgLine);
+    }
+
+    private setSelectedStyles() {
+        if (this.line) {
+            if (this.selected) {
+                this.line.classList.add('dg-selected');
+                this.line.setAttribute('marker-end', 'url(#arrowhead-selected)');
+            } else {
+                this.line.classList.remove('dg-selected');
+                this.line.setAttribute('marker-end', 'url(#arrowhead)');
+            }
+        }
     }
 
     get from(): string {
@@ -98,6 +109,7 @@ export class DgLink extends HTMLElement {
         } else {
             this.removeAttribute('selected');
         }
+        this.setSelectedStyles();
     }
 }
 

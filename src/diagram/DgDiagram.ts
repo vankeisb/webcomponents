@@ -26,8 +26,17 @@ const diagStyles = `
         position: relative;
     }
 
+    #arrowhead {
+        fill: black;
+    }
+
+    #arrowhead-selected {
+        fill: lightgreen;
+    }
+
     .dg-link-line {
         stroke: black;
+        cursor: pointer;
     }
 
     .dg-link-line.dg-selected {
@@ -37,6 +46,10 @@ const diagStyles = `
 
 const svgDefs = `
 <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" />
+</marker>
+<marker id="arrowhead-selected" markerWidth="10" markerHeight="7" 
 refX="9" refY="3.5" orient="auto">
     <polygon points="0 0, 10 3.5, 0 7" />
 </marker>
